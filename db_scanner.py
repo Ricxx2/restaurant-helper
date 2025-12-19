@@ -49,7 +49,7 @@ def check_menu_items_table(db_path):
     """
     conn = None
     try:
-        conn = sqlite3.connect(db_path)
+        conn = sqlite3.connect(db_path, timeout=10.0)
         cursor = conn.cursor()
         
         # Query to check if table exists
