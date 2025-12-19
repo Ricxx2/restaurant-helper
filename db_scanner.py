@@ -9,7 +9,6 @@ This script scans a directory and its subdirectories for SQLite database files
 import os
 import sqlite3
 import sys
-from pathlib import Path
 
 
 def scan_for_databases(directory):
@@ -48,6 +47,7 @@ def check_menu_items_table(db_path):
     Returns:
         bool: True if 'menu_items' table exists, False otherwise
     """
+    conn = None
     try:
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
@@ -59,8 +59,6 @@ def check_menu_items_table(db_path):
         """)
         
         result = cursor.fetchone()
-        conn.close()
-        
         return result is not None
         
     except sqlite3.Error as e:
@@ -69,6 +67,9 @@ def check_menu_items_table(db_path):
     except Exception as e:
         print(f"  Unexpected error with {db_path}: {e}")
         return False
+    finally:
+        if conn:
+            conn.close()
 
 
 def main():
